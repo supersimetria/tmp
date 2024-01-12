@@ -1,0 +1,84 @@
+#!/bin/bash
+#sudo pacman -Sy --noconfirm
+#----------------------------------------------------------------------
+curl -O https://blackarch.org/strap.sh
+echo 83d1977715139dd1b64dae40d121c171 strap.sh | md5sum -c
+chmod +x strap.sh
+sudo sed -i "/nameserver/i nameserver 8.8.8.8" /etc/resolv.conf
+gpgconf --kill all
+sudo ./strap.sh -v --noconfirm
+sudo rm /var/lib/pacman/sync/blackarch.db.sig
+sudo rm -r /var/lib/pacman/sync
+rm strap.sh
+#----------------------------------------------------------------------
+sudo pacman -Syyuu --noconfirm
+#----------------------------------------------------------------------
+sudo systemctl stop NetworkManager
+sudo systemctl disable NetworkManager
+sudo systemctl mask NetworkManager
+sudo systemctl unmask NetworkManager
+sudo systemctl start NetworkManager
+sudo systemctl enable sshd.service
+sudo systemctl start sshd.service
+#----------------------------------------------------------------------
+sudo pacman -Sw $(cat ~/Desktop/script/pac/pacman) --noconfirm
+sudo pacman -S $(cat ~/Desktop/script/pac/pacman) --noconfirm
+#----------------------------------------------------------------------
+yay -S anydesk-bin \
+  czkawka-gui-bin \
+  drawio-desktop-bin \
+  figma-linux \
+  megasync-bin \
+  virtualbox-ext-oracle \
+  archtorify-git \
+  iwscanner \
+  quickhash-gui-bin \
+  metadata-cleaner \
+  onlyoffice-bin \
+ --noconfirm
+
+  #freefilesync \
+#----------------------------------------------------------------------
+cd /opt/ && sudo mkdir -pm 777 dpkg && cd dpkg; sudo mkdir -pm 777 routerscaner
+killall -i -v -w firefox
+sudo mkdir /var/tmp/librefox_temporarily; cd /var/tmp/librefox_temporarily
+sudo wget https://github.com/intika/Librefox/releases/download/Librefox-v2.1-v64.0.0/Librefox-2.1-Firefox-Linux-64.0.0.zip -N
+sudo unzip -n Librefox*
+sudo rm -r /usr/lib/firefox/defaults/ /usr/lib/firefox/distribution/
+sudo cp -r defaults/ distribution/ mozilla.cfg Readme.Installation.Instructions.txt /usr/lib/firefox/
+sudo rm -r /var/tmp/librefox_temporarily
+#----------------------------------------------------------------------
+wget https://github.com/GitSquared/edex-ui/releases/download/v2.2.8/eDEX-UI-Linux-x86_64.AppImage
+sudo chmod 755 eDEX-UI-Linux-x86_64.AppImage
+./eDEX-UI-Linux-x86_64.AppImage ## add sleep proces
+git clone https://github.com/GitSquared/horizon-edex-theme.git
+mv horizon-edex-theme/fonts/* ~/.config/eDEX-UI/fonts/
+mv horizon-edex-theme/themes/* ~/.config/eDEX-UI/themes
+sudo rm -r horizon-edex-theme
+mv eDEX-UI-Linux-x86_64.AppImage ~/.config
+#----------------------------------------------------------------------
+curl https://raw.githubusercontent.com/scopatz/nanorc/master/install.sh | sh
+#----------------------------------------------------------------------
+sudo groupadd -g 109 vboxsf
+sudo groupadd -g 6941 user_03
+sudo useradd -m -u 1214 -g 6941 -G 3,11,90,98,108,109,991,998 -s /bin/zsh user_00 #alan_smithee
+sudo useradd -m -u 2897 -g 6941 -G 3,11,90,98,108,109,991,998 -s /bin/zsh user_01 #brigid_tenenbaum
+sudo useradd -m -u 3180 -g 6941 -G 3,11,90,98,108,109,991,998 -s /bin/zsh user_02 #martin_margiela
+sudo useradd -m -u 9165 -g 6941 -G 3,11,90,98,108,109,991,998 -s /bin/zsh user_03 #super_simetria
+#----------------------------------------------------------------------
+(
+ echo 1234;
+ echo 1234;
+) | sudo passwd user_00
+(
+ echo 1234;
+ echo 1234;
+) | sudo passwd user_01
+(
+ echo 1234;
+ echo 1234;
+) | sudo passwd user_02
+(
+ echo 1234;
+ echo 1234;
+) | sudo passwd user_03
